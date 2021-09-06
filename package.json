@@ -1,0 +1,19 @@
+{
+  "name": "guiaperguntas",
+  "version": "1.0.0",
+  "description": "Uma plataforma de perguntas e respostas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabriel-baltazar/GuiaPerguntas.git"
+  },
+  "author": "Gabriel Baltazar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabriel-baltazar/GuiaPerguntas/issues"
+  },
+  "homepage": "https://github.com/gabriel-baltazar/GuiaPerguntas#readme"
+}
