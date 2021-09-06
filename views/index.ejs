@@ -2,7 +2,24 @@
 <body>
   <%- include ('partials/navbar.ejs') %>
   <div class="container">
-    <h1>Testando container</h1>
+    <br>
+    <div class="d-grid gap-2 col-6 mx-auto"> 
+    <a href="/perguntar" class="btn btn-primary btn-lg mx-auto">Perguntar</a>  
+    <h1 class="mx-auto">Perguntas</h1>
+   
+  </div>
+    <% perguntas.forEach(pergunta => { %>
+      <br>
+      <div class="card">
+        <div class="card-body">
+          <h3><%= pergunta.titulo %></h3>  
+        </div>
+          
+          <div class="card-footer">
+            <button class="btn btn-primary">Responder</button>
+          </div>
+      </div>
+    <% });%> 
 
   </div>
 

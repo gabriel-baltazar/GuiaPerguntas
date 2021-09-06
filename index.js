@@ -21,8 +21,14 @@ app.use(express.json());
 
 //Rotas
 app.get('/',(request,response)=>{
-
-  response.render('index');
+  //Buscar dados no bd e 'raw' é para trazer apenas os dados da tabela
+  Pergunta.findAll({raw:true, order:[
+    ['id','DESC'] //ASC = Crescente || DESC = Decrescente
+  ]}).then(perguntas =>{
+    response.render('index',{
+      perguntas:perguntas
+    })
+  })
 });
 
 app.get('/perguntar', (request, response)=>{
@@ -32,6 +38,7 @@ app.get('/perguntar', (request, response)=>{
 app.post('/salvarpergunta',(request, response)=>{
   var titulo = request.body.titulo;
   var descricao = request.body.descricao;
+
   //Salvando a pergunta no banco de dados (INSERT)
   Pergunta.create({
     titulo: titulo,
@@ -39,6 +46,20 @@ app.post('/salvarpergunta',(request, response)=>{
   }).then(()=>{
     response.redirect("/");
   })
+})
+
+app.get('/pergunta/:id',(request,response)=>{
+  const id = request.params.id;
+  //Buscando no banco a pergunta com o id correspondente
+  Pergunta.findOne({
+    where: {id: id}
+  }).then(pergunta=>{
+    if(pergunta != undefined){ //Pergunta foi encontrada
+      response.render("pergunta")
+    }else{ //Não encontrada
+      response.redirect("/");
+    }
+  });
 })
 
 app.listen(8080,()=>{
