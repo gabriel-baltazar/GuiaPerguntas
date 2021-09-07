@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const connection = require('./database/database');
 const Pergunta = require('./database/Pergunta');
+const Resposta = require('./database/Resposta');
 
 //conexão com banco de dados
 connection.authenticate()
@@ -36,31 +37,55 @@ app.get('/perguntar', (request, response)=>{
 })
 
 app.post('/salvarpergunta',(request, response)=>{
-  var titulo = request.body.titulo;
-  var descricao = request.body.descricao;
+  const titulo = request.body.titulo;
+  const descricao = request.body.descricao;
 
   //Salvando a pergunta no banco de dados (INSERT)
   Pergunta.create({
     titulo: titulo,
     descricao: descricao
   }).then(()=>{
-    response.redirect("/");
+    response.redirect('/');
   })
 })
 
 app.get('/pergunta/:id',(request,response)=>{
   const id = request.params.id;
   //Buscando no banco a pergunta com o id correspondente
+  
+
+  //Buscando no banco a pergunta com o id correspondente
   Pergunta.findOne({
     where: {id: id}
   }).then(pergunta=>{
     if(pergunta != undefined){ //Pergunta foi encontrada
-      response.render("pergunta")
+      Resposta.findAll({
+        where: {perguntaId: pergunta.id},
+        order: [['id','DESC']]
+      }).then(respostas =>{
+        response.render('pergunta',{
+          pergunta: pergunta,
+          respostas:respostas
+        });
+      });
     }else{ //Não encontrada
       response.redirect("/");
     }
   });
 })
+
+app.post('/responder', (request, response)=>{
+  const corpo = request.body.corpo;
+  const perguntaId = request.body.pergunta;
+
+  Resposta.create({
+    corpo:corpo,
+    perguntaId:perguntaId
+  }).then(()=>{
+    response.redirect('/pergunta/'+perguntaId);
+  })
+})
+
 
 app.listen(8080,()=>{
   console.log('App rodando 🚀');
